@@ -7,16 +7,51 @@
 //
 
 #import "AppDelegate.h"
+#import "LoginViewController.h"
+#import "HomeViewController.h"
+#import "TwitterClient.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
+    
+    // Init login view controller
+    UINavigationController *nvc;
+    if([[TwitterClient instance] isClientAuthorized]){
+        HomeViewController *vc = [[HomeViewController alloc]init];
+        nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    } else {
+        LoginViewController *vc = [[LoginViewController alloc]init];
+        nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    }
+    
+    self.window.rootViewController = nvc;
+    
+    
+    
+    // Init NSNotification center
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(displayAppropriateViewController)
+												 name:UserDidLoginNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(displayAppropriateViewController)
+												 name:UserDidLogoutNotification object:nil];
+    
+    
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+    NSLog(@"Application openUrl %@|%@", url, sourceApplication);
+    
+    return [[TwitterClient instance] comebackFromTwitterAuthWithUrl:url];
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -44,6 +79,20 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+- (void)displayAppropriateViewController{
+    UINavigationController *nvc;
+    if([[TwitterClient instance] isClientAuthorized]){
+        HomeViewController *vc = [[HomeViewController alloc]init];
+        nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    } else {
+        LoginViewController *vc = [[LoginViewController alloc]init];
+        nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    }
+    
+    self.window.rootViewController = nvc;
 }
 
 @end
