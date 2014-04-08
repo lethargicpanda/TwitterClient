@@ -33,6 +33,8 @@
 		E903DC8E18E8B65A00D4D3CE /* TweetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E903DC8C18E8B65A00D4D3CE /* TweetViewController.xib */; };
 		E903DC9218E8F04700D4D3CE /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E903DC9018E8F04700D4D3CE /* EditViewController.m */; };
 		E903DC9318E8F04700D4D3CE /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E903DC9118E8F04700D4D3CE /* EditViewController.xib */; };
+		E9DB5C6A18F39D91007B2C84 /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9DB5C6818F39D91007B2C84 /* MenuViewController.m */; };
+		E9DB5C6B18F39D91007B2C84 /* MenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E9DB5C6918F39D91007B2C84 /* MenuViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +87,9 @@
 		E903DC8F18E8F04700D4D3CE /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
 		E903DC9018E8F04700D4D3CE /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
 		E903DC9118E8F04700D4D3CE /* EditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditViewController.xib; sourceTree = "<group>"; };
+		E9DB5C6718F39D91007B2C84 /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
+		E9DB5C6818F39D91007B2C84 /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
+		E9DB5C6918F39D91007B2C84 /* MenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MenuViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +177,9 @@
 				E903DC8F18E8F04700D4D3CE /* EditViewController.h */,
 				E903DC9018E8F04700D4D3CE /* EditViewController.m */,
 				E903DC9118E8F04700D4D3CE /* EditViewController.xib */,
+				E9DB5C6718F39D91007B2C84 /* MenuViewController.h */,
+				E9DB5C6818F39D91007B2C84 /* MenuViewController.m */,
+				E9DB5C6918F39D91007B2C84 /* MenuViewController.xib */,
 			);
 			path = TwitterClient;
 			sourceTree = "<group>";
@@ -285,6 +293,7 @@
 				E903DC4718E53BC800D4D3CE /* InfoPlist.strings in Resources */,
 				E903DC7F18E799AD00D4D3CE /* HomeViewController.xib in Resources */,
 				E903DC8E18E8B65A00D4D3CE /* TweetViewController.xib in Resources */,
+				E9DB5C6B18F39D91007B2C84 /* MenuViewController.xib in Resources */,
 				E903DC8618E7BDEE00D4D3CE /* TweetViewCell.xib in Resources */,
 				E903DC4F18E53BC800D4D3CE /* Images.xcassets in Resources */,
 				E903DC6F18E53EF400D4D3CE /* LoginViewController.xib in Resources */,
@@ -349,6 +358,7 @@
 				E903DC4918E53BC800D4D3CE /* main.m in Sources */,
 				E903DC6E18E53EF400D4D3CE /* LoginViewController.m in Sources */,
 				E903DC8218E7BDB800D4D3CE /* TweetViewCell.m in Sources */,
+				E9DB5C6A18F39D91007B2C84 /* MenuViewController.m in Sources */,
 				E903DC7E18E799AD00D4D3CE /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

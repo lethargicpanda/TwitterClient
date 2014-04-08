@@ -33,6 +33,8 @@ static User *currentUser;
             NSLog(@"init user");
             NSLog(@"Init user:%@", responseObject);
             currentUser = [User  userWithData:responseObject];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:UserDidInit object:nil];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error){
             NSLog(@"failed to get user: %@", error.localizedDescription);
         }];

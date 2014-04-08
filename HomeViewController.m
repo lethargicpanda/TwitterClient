@@ -23,15 +23,19 @@
 
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
 
+@property (assign, nonatomic) NSString *mode;
+
 @end
 
 @implementation HomeViewController
+
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self timeline];
+        [self fetchTweets];
     }
     return self;
 }
@@ -53,7 +57,7 @@
     // Init pull to refresh
     self.refreshControl = [[UIRefreshControl alloc] init];
     self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
-    [self.refreshControl addTarget:self action:@selector(timeline) forControlEvents:UIControlEventValueChanged];
+    [self.refreshControl addTarget:self action:@selector(fetchTweets) forControlEvents:UIControlEventValueChanged];
     [self.tweetTableView addSubview:self.refreshControl];
     
 
@@ -66,7 +70,14 @@
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
     self.navigationItem.leftBarButtonItem = logoutButton;
     
-    
+    //
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(updateWithTimeline)
+												 name:UserDidTapTimeline object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(updateWithMentions)
+												 name:UserDidTapMention object:nil];
     
     [User initCurrentUser];
 }
@@ -75,6 +86,16 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)updateWithTimeline{
+    self.mode = @"timeline";
+    [self fetchTweets];
+}
+
+-(void)updateWithMentions{
+    self.mode = @"mentions";
+    [self fetchTweets];
 }
 
 
@@ -133,6 +154,19 @@
 
 
 #pragma - Network communication
+-(void)fetchTweets{
+    if ([self.mode isEqualToString:@"mentions"]) {
+        [self mentions];
+    } else if ([self.mode isEqualToString:@"retweets"]) {
+        [self retweets];
+    } else {
+        [self timeline];
+    }
+}
+
+
+
+
 -(void)timeline{
     NSLog(@"fetch timeline");
     self.tweetArray = [[NSMutableArray alloc] init];
@@ -143,6 +177,56 @@
     [[TwitterClient instance] GET:@"1.1/statuses/home_timeline.json" parameters:@{@"count": @"30", @"include_my_retweet": @YES} success:^(AFHTTPRequestOperation *operation, id responseObject){
         
 
+        for (NSDictionary *tweet in responseObject) {
+            Tweet *currTweet = [Tweet createFromDictionary:tweet];
+            [self.tweetArray addObject:currTweet];
+        }
+        
+        [self.refreshControl endRefreshing];
+        [self.tweetTableView reloadData];
+        NSLog(@"%d", self.tweetArray.count);
+        
+    }failure:^(AFHTTPRequestOperation *operation, id responseObject){
+        NSLog(@"error: %@", responseObject);
+        [self.refreshControl endRefreshing];
+    }];
+}
+
+-(void)mentions{
+    NSLog(@"fetch mentions");
+    self.tweetArray = [[NSMutableArray alloc] init];
+    
+    [User initCurrentUser];
+    
+    
+    [[TwitterClient instance] GET:@"1.1/statuses/mentions_timeline.json" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject){
+        
+        
+        for (NSDictionary *tweet in responseObject) {
+            Tweet *currTweet = [Tweet createFromDictionary:tweet];
+            [self.tweetArray addObject:currTweet];
+        }
+        
+        [self.refreshControl endRefreshing];
+        [self.tweetTableView reloadData];
+        NSLog(@"%d", self.tweetArray.count);
+        
+    }failure:^(AFHTTPRequestOperation *operation, id responseObject){
+        NSLog(@"error: %@", responseObject);
+        [self.refreshControl endRefreshing];
+    }];
+}
+
+-(void)retweets{
+    NSLog(@"fetch retweets");
+    self.tweetArray = [[NSMutableArray alloc] init];
+    
+    [User initCurrentUser];
+    
+    
+    [[TwitterClient instance] GET:@"1.1/statuses/retweets_of_me.json" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject){
+        
+        
         for (NSDictionary *tweet in responseObject) {
             Tweet *currTweet = [Tweet createFromDictionary:tweet];
             [self.tweetArray addObject:currTweet];
@@ -181,5 +265,6 @@
     [self.tweetArray insertObject:tweet atIndex:0];
     [self.tweetTableView reloadData];
 }
+
 
 @end

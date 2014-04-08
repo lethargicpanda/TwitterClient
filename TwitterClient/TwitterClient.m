@@ -17,6 +17,11 @@
 
 NSString * const UserDidLoginNotification = @"UserDidLoginNotification";
 NSString * const UserDidLogoutNotification = @"UserDidLogoutNotification";
+NSString * const UserDidInit = @"UserDidInit";
+NSString * const UserDidTapTimeline = @"UserDidTapTimeline";
+NSString * const UserDidTapMention = @"UserDidTapMention";
+
+
 
 @implementation TwitterClient
 

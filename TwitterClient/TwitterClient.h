@@ -10,6 +10,9 @@
 
 extern NSString * const UserDidLoginNotification;
 extern NSString * const UserDidLogoutNotification;
+extern NSString * const UserDidInit;
+extern NSString * const UserDidTapTimeline;
+extern NSString * const UserDidTapMention;
 
 @interface TwitterClient : BDBOAuth1RequestOperationManager
 

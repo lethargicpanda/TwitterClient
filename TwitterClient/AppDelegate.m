@@ -18,18 +18,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     // Init login view controller
-    UINavigationController *nvc;
-    if([[TwitterClient instance] isClientAuthorized]){
-        HomeViewController *vc = [[HomeViewController alloc]init];
-        nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    } else {
-        LoginViewController *vc = [[LoginViewController alloc]init];
-        nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    }
-    
-    self.window.rootViewController = nvc;
-    
-    
+    [self initViewControllers];
+
     
     // Init NSNotification center
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -83,16 +73,61 @@
 
 
 - (void)displayAppropriateViewController{
-    UINavigationController *nvc;
+    [self initViewControllers];
+
+}
+
+
+#pragma - 
+- (void)didPanGesture:(UIPanGestureRecognizer *)panGestureRecognizer{
+    double xTrans = [panGestureRecognizer translationInView:self.window].x;
+    NSLog(@"Translation: %f", xTrans);
+    
+    if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+    
+        CGRect frame = self.homeViewController.view.frame;
+    
+        if (!self.isMenuOpen && xTrans > 100 ) {
+            frame.origin.x = [[UIScreen mainScreen] bounds].size.width - 60;
+            self.isMenuOpen = YES;
+        } else if(xTrans < -100) {
+            frame.origin.x = 0.0;
+            self.isMenuOpen = NO;
+        }
+    
+        [UIView animateWithDuration:0.75 delay:0 usingSpringWithDamping:1.3 initialSpringVelocity:1 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+		self.homeViewController.view.frame = frame;
+        } completion:nil];
+    }
+}
+
+-(void)initViewControllers{
+    // Init login view controller
     if([[TwitterClient instance] isClientAuthorized]){
-        HomeViewController *vc = [[HomeViewController alloc]init];
-        nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+        
+        self.homeViewController = [[HomeViewController alloc]init];
+        self.menuViewController = [[MenuViewController alloc] init];
+        
+        self.navigationViewController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
+        self.containerViewController = [[UIViewController alloc] init];
+        [self.containerViewController.view addSubview:self.menuViewController.view];
+        [self.containerViewController.view addSubview:self.navigationViewController.view];
+        
+        self.isMenuOpen = NO;
+        
+        self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanGesture:)];
+        [self.window addGestureRecognizer:self.panGestureRecognizer];
+        
+        self.window.rootViewController = self.containerViewController;
+        
+        
     } else {
         LoginViewController *vc = [[LoginViewController alloc]init];
-        nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+        UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+        self.window.rootViewController = nvc;
+        
     }
-    
-    self.window.rootViewController = nvc;
 }
+
 
 @end

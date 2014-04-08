@@ -31,6 +31,10 @@
     
     [self.profileImage setImageWithURL:[NSURL URLWithString:self.tweet.profilePictureUrl] placeholderImage:[UIImage imageNamed:@"profilePlaceHolder"]];
     
+    [self.profileImage setUserInteractionEnabled:YES];
+    [self.profileImage addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapImage)]];
+    
+    
     if (self.tweet.retweeter.screenName == nil){
         self.retweetLabel.hidden = YES;
     } else {
@@ -63,6 +67,9 @@
     [self addFavorite];
 }
 
+
+
+
 - (void)retweet{
     NSString *url = [NSString stringWithFormat:@"1.1/statuses/retweet/%@.json", self.tweet.tweetId];
     [[TwitterClient instance] POST:url
@@ -84,6 +91,12 @@
                            failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                NSLog(@"error adding to favorites: %@", error.localizedDescription);
                            }];
+}
+
+-(void)didTapImage  {
+    // Open Web view with user profile page
+    NSString *authURL = [NSString stringWithFormat:@"https://twitter.com/%@", self.tweet.user.screenName];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:authURL]];
 }
 
 @end

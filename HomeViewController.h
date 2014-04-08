@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EditViewController.h"
 
-@interface HomeViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EditTweetDelegate>
+@interface HomeViewController : UIViewController<UITableViewDataSource, UITableViewDelegate, EditTweetDelegate, UIGestureRecognizerDelegate>
+
 
 @end
