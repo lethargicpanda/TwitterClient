@@ -20,6 +20,8 @@
 @property (strong, nonatomic) UIViewController *containerViewController;
 
 @property (strong, nonatomic) UIPanGestureRecognizer *panGestureRecognizer;
+@property (strong, nonatomic) UISwipeGestureRecognizer *swipeGestureRecognizer;
+
 @property (assign, nonatomic) BOOL isMenuOpen;
 
 @end

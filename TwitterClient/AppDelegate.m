@@ -101,6 +101,36 @@
     }
 }
 
+
+- (void)didSwipeGesture:(UISwipeGestureRecognizer *)swipeGestureRecognizer{
+//    double xTrans = [swipeGestureRecognizer  translationInView:self.window].x;
+//    NSLog(@"Translation: %f", xTrans);
+    
+    if (swipeGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+
+        CGRect frame = self.homeViewController.view.frame;
+        
+        NSLog(@"Direction %d", swipeGestureRecognizer.direction);
+        
+        if (swipeGestureRecognizer.direction == UISwipeGestureRecognizerDirectionRight) {
+            frame.origin.x = [[UIScreen mainScreen] bounds].size.width - 60;
+            self.isMenuOpen = YES;
+        } else if (swipeGestureRecognizer.direction == UISwipeGestureRecognizerDirectionLeft) {
+            frame.origin.x = 0.0;
+            self.isMenuOpen = NO;
+        }
+        
+        [UIView animateWithDuration:0.75 delay:0 usingSpringWithDamping:1.3 initialSpringVelocity:1 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+            self.homeViewController.view.frame = frame;
+        } completion:nil];
+    
+        }
+    
+    
+    
+}
+
+
 -(void)initViewControllers{
     // Init login view controller
     if([[TwitterClient instance] isClientAuthorized]){
@@ -116,7 +146,10 @@
         self.isMenuOpen = NO;
         
         self.panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPanGesture:)];
-        [self.window addGestureRecognizer:self.panGestureRecognizer];
+//        self.swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(didSwipeGesture:)];
+//        self.swipe    GestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
+
+        [self.containerViewController.view addGestureRecognizer:self.panGestureRecognizer];
         
         self.window.rootViewController = self.containerViewController;
         
